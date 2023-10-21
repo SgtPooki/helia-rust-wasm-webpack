@@ -1,12 +1,12 @@
-const main = async () => {
-  try {
+import init, {bytes_to_string} from "../pkg/index.js"
+import { createHelia } from 'helia'
 
-    const index = await import("../pkg/index.js")
-    console.log(index)
-    index()
-  } catch(e) {
-    console.error("Error importing `index.js`:", e)
-  }
+try {
+  console.log('bytes_to_string', bytes_to_string)
+} catch(e) {
+  console.error("Error importing `index.js`:", e)
 }
 
-main() // Call main function
+const helia = createHelia()
+window.helia = helia
+console.log(`helia: `, helia);

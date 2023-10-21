@@ -21,6 +21,8 @@ lto = true
 #default = ["wee_alloc"]
 
 [dependencies]
+bincode = "1.3.3"
+multiaddr = "0.18.0"
 # The `wasm-bindgen` crate provides the bare minimum functionality needed
 # to interact with JavaScript.
 wasm-bindgen = "0.2.45"

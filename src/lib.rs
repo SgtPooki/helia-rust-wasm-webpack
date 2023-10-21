@@ -1,6 +1,9 @@
 use wasm_bindgen::prelude::*;
 use web_sys::console;
 
+extern crate multiaddr;
+
+use multiaddr::Multiaddr;
 
 // When the `wee_alloc` feature is enabled, this uses `wee_alloc` as the global
 // allocator.
@@ -9,7 +12,6 @@ use web_sys::console;
 #[cfg(feature = "wee_alloc")]
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
-
 
 // This is like the `main` function, except for JavaScript.
 #[wasm_bindgen(start)]
@@ -24,4 +26,16 @@ pub fn main_js() -> Result<(), JsValue> {
     console::log_1(&JsValue::from_str("Hello world!"));
 
     Ok(())
+}
+
+/**
+ * This method will receive Uint8Array from JavaScript and convert it to a Multiaddr string
+ * @param input Uint8Array
+ * @returns string
+ */
+#[wasm_bindgen]
+pub fn bytes_to_string(serialized: &[u8]) -> Result<String, JsValue> {
+  let deserialized: Multiaddr = bincode::deserialize(&serialized).unwrap();
+  let multiaddr_string = deserialized.to_string();
+  Ok(multiaddr_string)
 }
