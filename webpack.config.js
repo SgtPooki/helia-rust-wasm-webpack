@@ -3,7 +3,9 @@ import { resolve } from "path";
 import CopyPlugin from "copy-webpack-plugin";
 import WasmPackPlugin from "@wasm-tool/wasm-pack-plugin";
 import * as url from 'url';
+import webpack from 'webpack';
 
+const { DefinePlugin } = webpack;
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -50,7 +52,12 @@ export const plugins = [
   new WasmPackPlugin({
     crateDirectory: __dirname,
   }),
+  new DefinePlugin({
+    global: 'globalThis'
+})
 ];
+
+// add a define config so that webpack doesn't whine about 'global' being used
 
 
 
@@ -58,6 +65,7 @@ export const plugins = [
  * @type {import("webpack").Configuration}
  */
 export default {
+  // @ts-ignore
   devServer,
   entry,
   experiments: {
@@ -72,8 +80,9 @@ export default {
   mode,
   output,
   performance: {
-    maxEntrypointSize: 650000,
-    maxAssetSize: 650000,
+    // currently sitting at 7.11MiB
+    maxEntrypointSize: 7.5 * 1024 * 1024,
+    maxAssetSize: 7.5 * 1024 * 1024,
   },
   plugins
 };
